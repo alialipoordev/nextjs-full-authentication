@@ -3,21 +3,26 @@ import { getSession, useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
 
 export default function Home() {
-  const session = useSession();
+  const { data: session } = useSession();
   console.log(session);
 
   return (
-    <>
-      <h1 className="text-red-700 text-4xl bg-yellow-100">
-        Welcome to the course
-      </h1>
-      <button onClick={() => signIn()} style={{ background: "green" }}>
-        sign in
-      </button>
-      <button onClick={() => signOut()} style={{ background: "red" }}>
-        sign out
-      </button>
-    </>
+    <div className="h-screen w-screen flex items-center justify-center">
+      {session ? (
+        <div className="flex flex-col gap-1 items-center">
+          <h2>{session.user?.name}</h2>
+          <img
+            src={session.user?.image as string}
+            alt="profile image"
+            className="w-32 h-32 rounded-full"
+          />
+          <h4>{session.user?.email}</h4>
+          <button onClick={() => signOut()}>sign out</button>
+        </div>
+      ) : (
+        <button onClick={() => signIn()}>sign in</button>
+      )}
+    </div>
   );
 }
 
