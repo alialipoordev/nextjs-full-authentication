@@ -2,11 +2,12 @@ import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
-import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/db";
+import type { Adapter } from "next-auth/adapters";
 
 export default NextAuth({
-  adapter: MongoDBAdapter(clientPromise),
+  adapter: MongoDBAdapter(clientPromise) as Adapter,
   providers: [
     // OAuth authentication providers...
     FacebookProvider({
@@ -23,4 +24,7 @@ export default NextAuth({
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
 });
