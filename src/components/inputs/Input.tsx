@@ -29,7 +29,7 @@ const Input: React.FunctionComponent<IInputProps> = ({
         <div
           className="pointer-event-none absolute left-0 top-0.5 inset-y-0
             flex items-center pl-3"
-          style={{ transform: `${error ? "translateY(-12px)" : ""}` }}
+          style={error && { transform: "translateY(-12px)" }}
         >
           <span className="text-gray-500 text-sm">{icon}</span>
         </div>
@@ -40,7 +40,7 @@ const Input: React.FunctionComponent<IInputProps> = ({
          border-gray-300 outline-offset-2 outline-transparent text-sm
          focus:border-blue-500 focus:ring-blue-700 focus:ring-2"
           {...register(name)}
-          style={{ borderColor: `${error ? "#ed4337" : ""}` }}
+          style={error && { borderColor: "#ed4337" }}
         />
         {error && (
           <div className="fill-red-500 absolute right-2 top-2.5 text-xl">
