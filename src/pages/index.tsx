@@ -56,7 +56,12 @@ export default function Home() {
                   <p className="font-bold text-xs">{text2}</p>
                   <div className="mt-6 flex items-center justify-center gap-2">
                     Source code here : &nbsp;
-                    <a href="http://" target="_blank" rel="noopener noreferrer" className="text-4xl">
+                    <a
+                      href="http://"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-4xl"
+                    >
                       <AiFillGithub />
                     </a>
                   </div>
