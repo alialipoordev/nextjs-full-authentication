@@ -7,37 +7,42 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FiLock, FiMail } from "react-icons/fi";
 import { BsTelephone } from "react-icons/bs";
 import validator from "validator";
+import zxcvbn from "zxcvbn";
 
 interface IRegisterFormProps {}
 
-const FormSchema = z.object({
-  first_name: z
-    .string()
-    .min(2, "First name must be at least 2 characters")
-    .max(32, "First name must be less than 32 characters")
-    .regex(new RegExp("^[a-zA-Z]+$"), "No special characters allowed."),
-  last_name: z
-    .string()
-    .min(2, "Last name must be at least 2 characters")
-    .max(32, "Last name must be less than 32 characters")
-    .regex(new RegExp("^[a-zA-Z]+$"), "No special characters allowed."),
-  email: z.string().email("Please enter a valid address."),
-  phone: z.string().refine(validator.isMobilePhone, {
-    message: "Please enter a valid phone number",
-  }),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters.")
-    .max(52, "Password must be less than 6 characters."),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Password doesn't match!",
-  path: ["confirmPassword"]
-});
+const FormSchema = z
+  .object({
+    first_name: z
+      .string()
+      .min(2, "First name must be at least 2 characters")
+      .max(32, "First name must be less than 32 characters")
+      .regex(new RegExp("^[a-zA-Z]+$"), "No special characters allowed."),
+    last_name: z
+      .string()
+      .min(2, "Last name must be at least 2 characters")
+      .max(32, "Last name must be less than 32 characters")
+      .regex(new RegExp("^[a-zA-Z]+$"), "No special characters allowed."),
+    email: z.string().email("Please enter a valid address."),
+    phone: z.string().refine(validator.isMobilePhone, {
+      message: "Please enter a valid phone number",
+    }),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters.")
+      .max(52, "Password must be less than 6 characters."),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password doesn't match!",
+    path: ["confirmPassword"],
+  });
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
+  const [passwordScore, setPasswordScore] = React.useState(0);
+
   const {
     register,
     handleSubmit,
@@ -48,6 +53,15 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
   });
 
   const onSubmit = (data: any) => console.log(data);
+
+  const validatePasswordStrength = () => {
+    let password = watch().password;
+    return zxcvbn(password ? password : "").score;
+  };
+
+  React.useEffect(() => {
+    setPasswordScore(validatePasswordStrength())
+  }, [watch().password]);
 
   return (
     <form className="my-8 text-sm" onSubmit={handleSubmit(onSubmit)}>
@@ -102,11 +116,12 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
         register={register}
         error={errors?.password?.message}
         disabled={isSubmitting}
+        passwordScore={passwordScore}
       />
       <Input
         name="confirmPassword"
         label="Confirm password"
-        type="text"
+        type="password"
         icon={<FiLock />}
         placeholder="******"
         register={register}

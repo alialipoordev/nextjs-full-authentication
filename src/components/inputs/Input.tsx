@@ -10,6 +10,7 @@ interface IInputProps {
   register: any;
   error: any;
   disabled: boolean;
+  passwordScore?: number;
 }
 
 const Input: React.FunctionComponent<IInputProps> = ({
@@ -21,6 +22,7 @@ const Input: React.FunctionComponent<IInputProps> = ({
   register,
   error,
   disabled,
+  passwordScore,
 }) => {
   const calculateTranslate = (): string => {
     if (name == "first_name" || name == "last_name") return "translateY(-22px)";
@@ -41,14 +43,23 @@ const Input: React.FunctionComponent<IInputProps> = ({
         <input
           type={type}
           placeholder={placeholder}
-          className="w-full py-2 pr-7 pl-8 block rounded-md border
+          className={`w-full py-2 pr-7 pl-8 block rounded-md border
          border-gray-300 outline-offset-2 outline-transparent text-sm
-         focus:border-blue-500 focus:ring-blue-700 focus:ring-2"
+         focus:border-blue-500 focus:ring-blue-700 focus:ring-2
+          ${
+            type === "password" &&
+            passwordScore &&
+            (passwordScore <= 2
+              ? "bg-red-400"
+              : passwordScore < 4
+              ? "bg-yellow-400"
+              : "bg-green-500")
+          }`}
           {...register(name)}
           style={error && { borderColor: "#ed4337" }}
         />
         {error && (
-          <div className="fill-red-500 absolute right-2 top-2.5 text-xl">
+          <div className="fill-red-500 absolute right-2 top-2.5 text-xl flex">
             <IoAlertCircle fill="#ed4337" />
           </div>
         )}
