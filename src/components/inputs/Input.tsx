@@ -22,6 +22,11 @@ const Input: React.FunctionComponent<IInputProps> = ({
   error,
   disabled,
 }) => {
+  const calculateTranslate = (): string => {
+    if (name == "first_name" || name == "last_name") return "translateY(-22px)";
+    return "translateY(-12px)";
+  };
+
   return (
     <div className="mt-3 w-[100%]">
       <label htmlFor={name}>{label}</label>
@@ -29,7 +34,7 @@ const Input: React.FunctionComponent<IInputProps> = ({
         <div
           className="pointer-event-none absolute left-0 top-0.5 inset-y-0
             flex items-center pl-3"
-          style={error && { transform: "translateY(-12px)" }}
+          style={error && { transform: calculateTranslate() }}
         >
           <span className="text-gray-500 text-sm">{icon}</span>
         </div>
