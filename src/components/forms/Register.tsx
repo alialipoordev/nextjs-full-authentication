@@ -4,7 +4,7 @@ import { CiUser } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FiMail } from "react-icons/fi";
+import { FiLock, FiMail } from "react-icons/fi";
 import { BsTelephone } from "react-icons/bs";
 import validator from "validator";
 
@@ -25,6 +25,14 @@ const FormSchema = z.object({
   phone: z.string().refine(validator.isMobilePhone, {
     message: "Please enter a valid phone number",
   }),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters.")
+    .max(52, "Password must be less than 6 characters."),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Password doesn't match!",
+  path: ["confirmPassword"]
 });
 
 type FormSchemaType = z.infer<typeof FormSchema>;
@@ -83,6 +91,26 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
         placeholder="+(xxx) xxx-xx-xx"
         register={register}
         error={errors?.phone?.message}
+        disabled={isSubmitting}
+      />
+      <Input
+        name="password"
+        label="Password"
+        type="password"
+        icon={<FiLock />}
+        placeholder="******"
+        register={register}
+        error={errors?.password?.message}
+        disabled={isSubmitting}
+      />
+      <Input
+        name="confirmPassword"
+        label="Confirm password"
+        type="text"
+        icon={<FiLock />}
+        placeholder="******"
+        register={register}
+        error={errors?.confirmPassword?.message}
         disabled={isSubmitting}
       />
       <button type="submit">Submit</button>
