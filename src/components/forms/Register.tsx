@@ -32,6 +32,12 @@ const FormSchema = z
       .min(6, "Password must be at least 6 characters.")
       .max(52, "Password must be less than 6 characters."),
     confirmPassword: z.string(),
+    accept: z.literal(true, {
+      errorMap: () => ({
+        message:
+          "please agree to all the terms and conditions before continue.",
+      }),
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password doesn't match!",
@@ -60,7 +66,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
   };
 
   React.useEffect(() => {
-    setPasswordScore(validatePasswordStrength())
+    setPasswordScore(validatePasswordStrength());
   }, [watch().password]);
 
   return (
@@ -128,6 +134,35 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
         error={errors?.confirmPassword?.message}
         disabled={isSubmitting}
       />
+      <div className="flex items-center mt-3">
+        <input
+          type="checkbox"
+          id="accept"
+          {...register("accept")}
+          className="rounded mr-2 focus:right-0"
+        />
+        <label htmlFor="accept" className="text-gray-700">
+          I accept the &nbsp;
+          <a
+            href="#"
+            className="text-blue-600 hover:text-blue-700 hover:underline"
+            target="_blank"
+          >
+            terms
+          </a>
+          &nbsp;and&nbsp;
+          <a
+            href="#"
+            className="text-blue-600 hover:text-blue-700 hover:underline"
+            target="_blank"
+          >
+            privacy policy
+          </a>
+        </label>
+      </div>
+      {errors?.accept && (
+        <p className="mt-1 text-red-600 text-sm">{errors?.accept.message}</p>
+      )}
       <button type="submit">Submit</button>
     </form>
   );
