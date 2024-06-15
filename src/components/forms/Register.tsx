@@ -8,6 +8,7 @@ import { FiLock, FiMail } from "react-icons/fi";
 import { BsTelephone } from "react-icons/bs";
 import validator from "validator";
 import zxcvbn from "zxcvbn";
+import SlideButton from "../buttons/SlideButton";
 
 interface IRegisterFormProps {}
 
@@ -163,7 +164,13 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
       {errors?.accept && (
         <p className="mt-1 text-red-600 text-sm">{errors?.accept.message}</p>
       )}
-      <button type="submit">Submit</button>
+      <SlideButton
+        type="submit"
+        text="Sign up"
+        slide_text="Secure sign up"
+        icon={<FiLock />}
+        disabled={isSubmitting}
+      />
     </form>
   );
 };
