@@ -10,7 +10,7 @@ import validator from "validator";
 import zxcvbn from "zxcvbn";
 import SlideButton from "../buttons/SlideButton";
 
-interface IRegisterFormProps {}
+interface RegisterFormProps {}
 
 const FormSchema = z
   .object({
@@ -47,7 +47,7 @@ const FormSchema = z
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
+const RegisterForm: React.FunctionComponent<RegisterFormProps> = (props) => {
   const [passwordScore, setPasswordScore] = React.useState(0);
 
   const {

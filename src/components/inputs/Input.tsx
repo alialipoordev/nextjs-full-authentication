@@ -1,7 +1,7 @@
 import * as React from "react";
 import { IoAlertCircle } from "react-icons/io5";
 
-interface IInputProps {
+interface InputProps {
   name: string;
   label: string;
   type: string;
@@ -13,7 +13,7 @@ interface IInputProps {
   passwordScore?: number;
 }
 
-const Input: React.FunctionComponent<IInputProps> = ({
+const Input: React.FunctionComponent<InputProps> = ({
   name,
   label,
   type,

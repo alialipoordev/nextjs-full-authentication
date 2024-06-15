@@ -1,7 +1,7 @@
 import * as React from "react";
 import { BeatLoader } from "react-spinners";
 
-interface ISlideButtonProps {
+interface SlideButtonProps {
   type: "submit" | "reset" | "button";
   text: string;
   slide_text: string;
@@ -9,7 +9,7 @@ interface ISlideButtonProps {
   disabled: boolean;
 }
 
-const SlideButton: React.FunctionComponent<ISlideButtonProps> = ({
+const SlideButton: React.FunctionComponent<SlideButtonProps> = ({
   type,
   text,
   slide_text,
