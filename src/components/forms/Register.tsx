@@ -9,6 +9,8 @@ import { BsTelephone } from "react-icons/bs";
 import validator from "validator";
 import zxcvbn from "zxcvbn";
 import SlideButton from "../buttons/SlideButton";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface RegisterFormProps {}
 
@@ -59,7 +61,16 @@ const RegisterForm: React.FunctionComponent<RegisterFormProps> = (props) => {
     resolver: zodResolver(FormSchema),
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (values: any) => {
+    try {
+      const { data } = await axios.post("api/auth/signup", {
+      ...values
+      })
+      toast.success(data.message)
+    } catch (error: any) {
+      toast.error(error.response.data.message)
+    }
+  };
 
   const validatePasswordStrength = () => {
     let password = watch().password;
