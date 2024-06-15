@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ImEye, ImEyeBlocked } from "react-icons/im";
 import { IoAlertCircle } from "react-icons/io5";
 
 interface InputProps {
@@ -24,6 +25,8 @@ const Input: React.FunctionComponent<InputProps> = ({
   disabled,
   passwordScore,
 }) => {
+  const [showPassword, setShowPassword] = React.useState(false);
+
   const calculateTranslate = (): string => {
     if (name == "first_name" || name == "last_name") return "translateY(-22px)";
     return "translateY(-12px)";
@@ -41,7 +44,7 @@ const Input: React.FunctionComponent<InputProps> = ({
           <span className="text-gray-500 text-sm">{icon}</span>
         </div>
         <input
-          type={type}
+          type={showPassword ? "text" : type}
           placeholder={placeholder}
           className={`w-full py-2 pr-7 pl-8 block rounded-md border
          border-gray-300 outline-offset-2 outline-transparent text-sm
@@ -58,6 +61,16 @@ const Input: React.FunctionComponent<InputProps> = ({
           {...register(name)}
           style={error && { borderColor: "#ed4337" }}
         />
+        {/* Show and Hide Password */}
+        {(name == "password" || name == "confirmPassword") && (
+          <div
+            style={error && { right: "2rem" }}
+            className="absolute top-2.5 right-2 text-xl text-gray-700 cursor-pointer"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <ImEye /> : <ImEyeBlocked />}
+          </div>
+        )}
         {error && (
           <div className="fill-red-500 absolute right-2 top-2.5 text-xl flex">
             <IoAlertCircle fill="#ed4337" />
