@@ -65,7 +65,7 @@ const Input: React.FunctionComponent<InputProps> = ({
         {(name == "password" || name == "confirmPassword") && (
           <div
             style={error && { right: "2rem" }}
-            className="absolute top-2.5 right-2 text-xl text-gray-700 cursor-pointer"
+            className="absolute top-2.5 right-2 text-lg text-gray-700 cursor-pointer"
             onClick={() => setShowPassword((prev) => !prev)}
           >
             {showPassword ? <ImEye /> : <ImEyeBlocked />}
