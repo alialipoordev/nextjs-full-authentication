@@ -11,9 +11,11 @@
   "dependencies": {
     "@auth/mongodb-adapter": "^3.2.0",
     "@hookform/resolvers": "^3.6.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/validator": "^13.11.10",
     "@types/zxcvbn": "^4.4.4",
     "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",
     "next": "14.2.3",

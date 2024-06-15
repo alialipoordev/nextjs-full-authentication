@@ -1,7 +1,7 @@
 import * as React from "react";
 import Input from "../inputs/Input";
 import { CiUser } from "react-icons/ci";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FiLock, FiMail } from "react-icons/fi";
@@ -61,7 +61,7 @@ const RegisterForm: React.FunctionComponent<RegisterFormProps> = (props) => {
     resolver: zodResolver(FormSchema),
   });
 
-  const onSubmit = async (values: any) => {
+  const onSubmit: SubmitHandler<FormSchemaType> = async (values: any) => {
     try {
       const { data } = await axios.post("api/auth/signup", {
       ...values
