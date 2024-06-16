@@ -1,6 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { activateTemplateEmail } from "@/email/templates/activate";
 import User from "@/models/User";
 import connectDB from "@/utils/connectDB";
+import sendMail from "@/utils/sendMail";
+import { createActivationToken } from "@/utils/tokens";
 import { hash } from "bcryptjs";
 import type { NextApiRequest, NextApiResponse } from "next";
 import validator from "validator";
@@ -55,6 +58,21 @@ export default async function handler(
     });
 
     await newUser.save();
+
+    const activation_token = createActivationToken({
+      id: newUser._id.toString(),
+    });
+
+    const url = `${process.env.NEXTAUTH_URL}/activate/${activation_token}`;
+
+    await sendMail(
+      newUser.email,
+      newUser.name,
+      "",
+      url,
+      "Activate your account",
+      activateTemplateEmail
+    );
 
     res.json({
       message: "Register success! Please activate your account to start.",
