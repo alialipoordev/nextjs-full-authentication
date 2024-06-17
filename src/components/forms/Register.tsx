@@ -11,6 +11,7 @@ import zxcvbn from "zxcvbn";
 import SlideButton from "../buttons/SlideButton";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 interface RegisterFormProps {}
 
@@ -65,12 +66,12 @@ const RegisterForm: React.FunctionComponent<RegisterFormProps> = (props) => {
   const onSubmit: SubmitHandler<FormSchemaType> = async (values: any) => {
     try {
       const { data } = await axios.post("api/auth/signup", {
-      ...values
-      })
-      reset()
-      toast.success(data.message)
+        ...values,
+      });
+      reset();
+      toast.success(data.message);
     } catch (error: any) {
-      toast.error(error.response.data.message)
+      toast.error(error.response.data.message);
     }
   };
 
@@ -84,107 +85,122 @@ const RegisterForm: React.FunctionComponent<RegisterFormProps> = (props) => {
   }, [watch().password]);
 
   return (
-    <form className="my-8 text-sm" onSubmit={handleSubmit(onSubmit)}>
-      <div className="gap-2 md:flex">
+    <div className="w-full px-12 py-4">
+      <h2 className="text-center text-2xl font-bold tracking-wide text-gray-800">
+        Sign up
+      </h2>
+      <p className="text-center text-sm text-gray-600 mt-2">
+        You already have an account? &nbsp;
+        <Link
+          href="/auth"
+          className="text-blue-600 hover:text-blue-700 hover:underline cursor-pointer"
+        >
+          Sign in
+        </Link>
+      </p>
+
+      <form className="my-8 text-sm" onSubmit={handleSubmit(onSubmit)}>
+        <div className="gap-2 md:flex">
+          <Input
+            name="first_name"
+            label="First name"
+            type="text"
+            icon={<CiUser />}
+            placeholder="example"
+            register={register}
+            error={errors?.first_name?.message}
+            disabled={isSubmitting}
+          />
+          <Input
+            name="last_name"
+            label="Last name"
+            type="text"
+            icon={<CiUser />}
+            placeholder="example"
+            register={register}
+            error={errors?.last_name?.message}
+            disabled={isSubmitting}
+          />
+        </div>
         <Input
-          name="first_name"
-          label="First name"
+          name="email"
+          label="Email"
           type="text"
-          icon={<CiUser />}
+          icon={<FiMail />}
           placeholder="example"
           register={register}
-          error={errors?.first_name?.message}
+          error={errors?.email?.message}
           disabled={isSubmitting}
         />
         <Input
-          name="last_name"
-          label="Last name"
+          name="phone"
+          label="Phone number"
           type="text"
-          icon={<CiUser />}
-          placeholder="example"
+          icon={<BsTelephone />}
+          placeholder="+(xxx) xxx-xx-xx"
           register={register}
-          error={errors?.last_name?.message}
+          error={errors?.phone?.message}
           disabled={isSubmitting}
         />
-      </div>
-      <Input
-        name="email"
-        label="Email"
-        type="text"
-        icon={<FiMail />}
-        placeholder="example"
-        register={register}
-        error={errors?.email?.message}
-        disabled={isSubmitting}
-      />
-      <Input
-        name="phone"
-        label="Phone number"
-        type="text"
-        icon={<BsTelephone />}
-        placeholder="+(xxx) xxx-xx-xx"
-        register={register}
-        error={errors?.phone?.message}
-        disabled={isSubmitting}
-      />
-      <Input
-        name="password"
-        label="Password"
-        type="password"
-        icon={<FiLock />}
-        placeholder="******"
-        register={register}
-        error={errors?.password?.message}
-        disabled={isSubmitting}
-        passwordScore={passwordScore}
-      />
-      <Input
-        name="confirmPassword"
-        label="Confirm password"
-        type="password"
-        icon={<FiLock />}
-        placeholder="******"
-        register={register}
-        error={errors?.confirmPassword?.message}
-        disabled={isSubmitting}
-      />
-      <div className="flex items-center mt-3">
-        <input
-          type="checkbox"
-          id="accept"
-          {...register("accept")}
-          className="rounded mr-2 focus:right-0"
+        <Input
+          name="password"
+          label="Password"
+          type="password"
+          icon={<FiLock />}
+          placeholder="******"
+          register={register}
+          error={errors?.password?.message}
+          disabled={isSubmitting}
+          passwordScore={passwordScore}
         />
-        <label htmlFor="accept" className="text-gray-700">
-          I accept the &nbsp;
-          <a
-            href="#"
-            className="text-blue-600 hover:text-blue-700 hover:underline"
-            target="_blank"
-          >
-            terms
-          </a>
-          &nbsp;and&nbsp;
-          <a
-            href="#"
-            className="text-blue-600 hover:text-blue-700 hover:underline"
-            target="_blank"
-          >
-            privacy policy
-          </a>
-        </label>
-      </div>
-      {errors?.accept && (
-        <p className="mt-1 text-red-600 text-sm">{errors?.accept.message}</p>
-      )}
-      <SlideButton
-        type="submit"
-        text="Sign up"
-        slide_text="Secure sign up"
-        icon={<FiLock />}
-        disabled={isSubmitting}
-      />
-    </form>
+        <Input
+          name="confirmPassword"
+          label="Confirm password"
+          type="password"
+          icon={<FiLock />}
+          placeholder="******"
+          register={register}
+          error={errors?.confirmPassword?.message}
+          disabled={isSubmitting}
+        />
+        <div className="flex items-center mt-3">
+          <input
+            type="checkbox"
+            id="accept"
+            {...register("accept")}
+            className="rounded mr-2 focus:right-0"
+          />
+          <label htmlFor="accept" className="text-gray-700">
+            I accept the &nbsp;
+            <a
+              href="#"
+              className="text-blue-600 hover:text-blue-700 hover:underline"
+              target="_blank"
+            >
+              terms
+            </a>
+            &nbsp;and&nbsp;
+            <a
+              href="#"
+              className="text-blue-600 hover:text-blue-700 hover:underline"
+              target="_blank"
+            >
+              privacy policy
+            </a>
+          </label>
+        </div>
+        {errors?.accept && (
+          <p className="mt-1 text-red-600 text-sm">{errors?.accept.message}</p>
+        )}
+        <SlideButton
+          type="submit"
+          text="Sign up"
+          slide_text="Secure sign up"
+          icon={<FiLock />}
+          disabled={isSubmitting}
+        />
+      </form>
+    </div>
   );
 };
 
