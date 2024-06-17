@@ -6,11 +6,14 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/db";
 import type { Adapter } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
+import CredentialsProvider from "next-auth/providers/credentials";
+import connectDB from "@/utils/connectDB";
+import UserModal from "@/models/User";
+import { compare } from "bcryptjs";
 
 export default NextAuth({
   adapter: MongoDBAdapter(clientPromise) as Adapter,
   providers: [
-    // OAuth authentication providers...
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID as string,
       clientSecret: process.env.FACEBOOK_SECRET as string,
@@ -23,6 +26,33 @@ export default NextAuth({
     GitHubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: {
+          label: "Username",
+          type: "text",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
+      },
+      async authorize(credentials) {
+        await connectDB();
+
+        const user = await UserModal.findOne({ email: credentials!?.email });
+        if (!user) throw new Error("Email is not registered.");
+
+        const isPasswordCorrect = await compare(
+          credentials!?.password,
+          user.password
+        );
+        if (!isPasswordCorrect) throw new Error("Password is incorrect.");
+        
+        return user;
+      },
     }),
   ],
   session: {
@@ -45,14 +75,12 @@ export default NextAuth({
       if (user) {
         token.provider = account?.provider;
       }
-      console.log(token);
       return token;
     },
     async session({ session, token }: { session: any; token: JWT }) {
       if (session.user) {
         session.user.provider = token.provider;
       }
-      console.log(session);
       return session;
     },
   },
