@@ -8,6 +8,7 @@ import SlideButton from "../buttons/SlideButton";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 interface LoginFormProps {
   callbackUrl: string;
@@ -102,6 +103,9 @@ const LoginForm: React.FunctionComponent<LoginFormProps> = ({
           error={errors?.password?.message}
           disabled={isSubmitting}
         />
+        <div className="mt-2 hover:underline w-fit">
+          <Link href="/forgot" className="text-blue-600">Forgot Password?</Link>
+        </div>
         <SlideButton
           type="submit"
           text="Sign in"
