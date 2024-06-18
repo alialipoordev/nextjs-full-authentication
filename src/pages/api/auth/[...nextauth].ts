@@ -50,13 +50,17 @@ export default NextAuth({
           user.password
         );
         if (!isPasswordCorrect) throw new Error("Password is incorrect.");
-        
+
         return user;
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
+  },
+  pages: {
+    signIn: "/auth",
   },
   callbacks: {
     async jwt({
