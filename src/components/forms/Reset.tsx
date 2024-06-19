@@ -43,7 +43,7 @@ const ResetForm: React.FunctionComponent<ResetFormProps> = ({token}) => {
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (values: any) => {
     try {
-      const { data } = await axios.post("api/auth/reset", {
+      const { data } = await axios.post("/api/auth/reset", {
         password: values.password,
         token
       });
